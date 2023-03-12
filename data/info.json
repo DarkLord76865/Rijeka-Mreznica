@@ -1,0 +1,750 @@
+{
+    "Mrežnica": {
+        "duljina": 64,
+        "izvor": "",
+        "ušće": "",
+        "opis": "",
+        "lokacije": {
+            "izvor": {},
+            "ušće": {},
+            "slapovi": {
+                "1": {
+                    "ime": "?",
+                    "vrsta": "poslapak",
+                    "visina": 0.4,
+                    "udaljenost do izvora": 0.25,
+                    "udaljenost do ušća": 63.75,
+                    "opis": ""
+                },
+                "2": {
+                    "ime": "?",
+                    "vrsta": "slap",
+                    "visina": "?",
+                    "udaljenost do izvora": 3.5,
+                    "udaljenost do ušća": 60.5,
+                    "opis": ""
+                },
+                "3": {
+                    "ime": "Ćuruvijin slap",
+                    "vrsta": "poslapak",
+                    "visina": "?",
+                    "udaljenost do izvora": 6.0,
+                    "udaljenost do ušća": 58.0,
+                    "opis": ""
+                },
+                "4": {
+                    "ime": "?",
+                    "vrsta": "dvostruki slap",
+                    "visina": 1.2,
+                    "udaljenost do izvora": 7.0,
+                    "udaljenost do ušća": 57.0,
+                    "opis": ""
+                },
+                "5": {
+                    "ime": "?",
+                    "vrsta": "slap",
+                    "visina": 0.6,
+                    "udaljenost do izvora": 7.0,
+                    "udaljenost do ušća": 57.0,
+                    "opis": ""
+                },
+                "6": {
+                    "ime": "?",
+                    "vrsta": "slap",
+                    "visina": 0.7,
+                    "udaljenost do izvora": 7.0,
+                    "udaljenost do ušća": 57.0,
+                    "opis": ""
+                },
+                "7": {
+                    "ime": "Gornji Ćaćića slap",
+                    "vrsta": "dvostruki slap",
+                    "visina": 2.0,
+                    "udaljenost do izvora": 7.5,
+                    "udaljenost do ušća": 56.5,
+                    "opis": ""
+                },
+                "8": {
+                    "ime": "Donji Ćaćića slap",
+                    "vrsta": "trostruki slap",
+                    "visina": 2.2,
+                    "udaljenost do izvora": 7.5,
+                    "udaljenost do ušća": 56.5,
+                    "opis": ""
+                },
+                "9": {
+                    "ime": "Slap kod Pijevaca",
+                    "vrsta": "slap",
+                    "visina": "?",
+                    "udaljenost do izvora": 10.0,
+                    "udaljenost do ušća": 54.0,
+                    "opis": ""
+                },
+                "10": {
+                    "ime": "Slap kod Milkovića",
+                    "vrsta": "slap",
+                    "visina": "?",
+                    "udaljenost do izvora": 11.0,
+                    "udaljenost do ušća": 53.0,
+                    "opis": ""
+                },
+                "11": {
+                    "ime": "?",
+                    "vrsta": "rastoke od 5 kaskada",
+                    "visina": 2.1,
+                    "udaljenost do izvora": 11.5,
+                    "udaljenost do ušća": 52.5,
+                    "opis": ""
+                },
+                "12": {
+                    "ime": "?",
+                    "vrsta": "slap",
+                    "visina": 3.0,
+                    "udaljenost do izvora": 12.75,
+                    "udaljenost do ušća": 51.25,
+                    "opis": ""
+                },
+                "13": {
+                    "ime": "?",
+                    "vrsta": "slap",
+                    "visina": 0.3,
+                    "udaljenost do izvora": 12.75,
+                    "udaljenost do ušća": 51.25,
+                    "opis": ""
+                },
+                "14": {
+                    "ime": "?",
+                    "vrsta": "slap u 2 kaskade",
+                    "visina": 2.2,
+                    "udaljenost do izvora": 12.75,
+                    "udaljenost do ušća": 51.25,
+                    "opis": ""
+                },
+                "15": {
+                    "ime": "?",
+                    "vrsta": "slap u 2 kaskade",
+                    "visina": 3.4,
+                    "udaljenost do izvora": 13.3,
+                    "udaljenost do ušća": 50.7,
+                    "opis": ""
+                },
+                "16": {
+                    "ime": "?",
+                    "vrsta": "slap",
+                    "visina": 1.1,
+                    "udaljenost do izvora": 13.3,
+                    "udaljenost do ušća": 50.7,
+                    "opis": ""
+                },
+                "17": {
+                    "ime": "?",
+                    "vrsta": "slap u 2 kaskade",
+                    "visina": 2.3,
+                    "udaljenost do izvora": 13.3,
+                    "udaljenost do ušća": 50.7,
+                    "opis": ""
+                },
+                "18": {
+                    "ime": "?",
+                    "vrsta": "slap",
+                    "visina": 0.3,
+                    "udaljenost do izvora": 13.8,
+                    "udaljenost do ušća": 50.2,
+                    "opis": ""
+                },
+                "19": {
+                    "ime": "?",
+                    "vrsta": "slap",
+                    "visina": 2.3,
+                    "udaljenost do izvora": 13.8,
+                    "udaljenost do ušća": 50.2,
+                    "opis": ""
+                },
+                "20": {
+                    "ime": "?",
+                    "vrsta": "slap",
+                    "visina": 2.0,
+                    "udaljenost do izvora": 13.8,
+                    "udaljenost do ušća": 50.2,
+                    "opis": ""
+                },
+                "21": {
+                    "ime": "?",
+                    "vrsta": "poslapak",
+                    "visina": 0.1,
+                    "udaljenost do izvora": 13.8,
+                    "udaljenost do ušća": 50.2,
+                    "opis": ""
+                },
+                "22": {
+                    "ime": "?",
+                    "vrsta": "slap",
+                    "visina": 0.6,
+                    "udaljenost do izvora": 13.8,
+                    "udaljenost do ušća": 50.2,
+                    "opis": ""
+                },
+                "23": {
+                    "ime": "?",
+                    "vrsta": "slap",
+                    "visina": 0.4,
+                    "udaljenost do izvora": 14.25,
+                    "udaljenost do ušća": 49.75,
+                    "opis": ""
+                },
+                "24": {
+                    "ime": "?",
+                    "vrsta": "slap",
+                    "visina": 1.0,
+                    "udaljenost do izvora": 14.25,
+                    "udaljenost do ušća": 49.75,
+                    "opis": ""
+                },
+                "25": {
+                    "ime": "Rončevića slap",
+                    "vrsta": "slap u 3 kaskade",
+                    "visina": 4.1,
+                    "udaljenost do izvora": 14.25,
+                    "udaljenost do ušća": 49.75,
+                    "opis": ""
+                },
+                "26": {
+                    "ime": "Milkovića slap",
+                    "vrsta": "slap",
+                    "visina": 8.5,
+                    "udaljenost do izvora": 15.5,
+                    "udaljenost do ušća": 48.5,
+                    "opis": ""
+                },
+                "27": {
+                    "ime": "Slap kod Ćujića vrela",
+                    "vrsta": "slap",
+                    "visina": 1.6,
+                    "udaljenost do izvora": 15.5,
+                    "udaljenost do ušća": 48.5,
+                    "opis": ""
+                },
+                "28": {
+                    "ime": "?",
+                    "vrsta": "slap",
+                    "visina": 1.2,
+                    "udaljenost do izvora": 15.5,
+                    "udaljenost do ušća": 48.5,
+                    "opis": ""
+                },
+                "29": {
+                    "ime": "?",
+                    "vrsta": "slap",
+                    "visina": 1.0,
+                    "udaljenost do izvora": 15.5,
+                    "udaljenost do ušća": 48.5,
+                    "opis": ""
+                },
+                "30": {
+                    "ime": "?",
+                    "vrsta": "slap",
+                    "visina": 0.9,
+                    "udaljenost do izvora": 15.5,
+                    "udaljenost do ušća": 48.5,
+                    "opis": ""
+                },
+                "31": {
+                    "ime": "?",
+                    "vrsta": "slap",
+                    "visina": 0.2,
+                    "udaljenost do izvora": 15.5,
+                    "udaljenost do ušća": 48.5,
+                    "opis": ""
+                },
+                "32": {
+                    "ime": "?",
+                    "vrsta": "slap",
+                    "visina": 2.0,
+                    "udaljenost do izvora": 15.5,
+                    "udaljenost do ušća": 48.5,
+                    "opis": ""
+                },
+                "33": {
+                    "ime": "?",
+                    "vrsta": "brzaci s više kaskada",
+                    "visina": 0.8,
+                    "udaljenost do izvora": 16.0,
+                    "udaljenost do ušća": 48.0,
+                    "opis": ""
+                },
+                "34": {
+                    "ime": "?",
+                    "vrsta": "brzaci s više kaskada",
+                    "visina": 1.5,
+                    "udaljenost do izvora": 16.0,
+                    "udaljenost do ušća": 48.0,
+                    "opis": ""
+                },
+                "35": {
+                    "ime": "?",
+                    "vrsta": "slap",
+                    "visina": 0.6,
+                    "udaljenost do izvora": 16.0,
+                    "udaljenost do ušća": 48.0,
+                    "opis": ""
+                },
+                "36": {
+                    "ime": "?",
+                    "vrsta": "slap",
+                    "visina": 3.0,
+                    "udaljenost do izvora": 16.4,
+                    "udaljenost do ušća": 47.6,
+                    "opis": ""
+                },
+                "37": {
+                    "ime": "Smoljanovića slap",
+                    "vrsta": "razvedene kaskade",
+                    "visina": 3.0,
+                    "udaljenost do izvora": 16.5,
+                    "udaljenost do ušća": 47.5,
+                    "opis": ""
+                },
+                "38": {
+                    "ime": "Reljića slap",
+                    "vrsta": "lijevo brzak, desno slap",
+                    "visina": 0.4,
+                    "udaljenost do izvora": 19.0,
+                    "udaljenost do ušća": 45.0,
+                    "opis": ""
+                },
+                "39": {
+                    "ime": "Jagodica slap",
+                    "vrsta": "slap",
+                    "visina": 1.4,
+                    "udaljenost do izvora": 19.0,
+                    "udaljenost do ušća": 45.0,
+                    "opis": ""
+                },
+                "40": {
+                    "ime": "Šušnjar",
+                    "vrsta": "slap u 2 kaskade",
+                    "visina": 12,
+                    "udaljenost do izvora": 20.5,
+                    "udaljenost do ušća": 43.5,
+                    "opis": ""
+                },
+                "41": {
+                    "ime": "?",
+                    "vrsta": "slap",
+                    "visina": 1.2,
+                    "udaljenost do izvora": 20.75,
+                    "udaljenost do ušća": 43.25,
+                    "opis": ""
+                },
+                "42": {
+                    "ime": "Korački slap",
+                    "vrsta": "4 kaskade",
+                    "visina": 1.1,
+                    "udaljenost do izvora": 21.0,
+                    "udaljenost do ušća": 43.0,
+                    "opis": ""
+                },
+                "43": {
+                    "ime": "?",
+                    "vrsta": "poslapak",
+                    "visina": 0.2,
+                    "udaljenost do izvora": 22.5,
+                    "udaljenost do ušća": 41.5,
+                    "opis": ""
+                },
+                "44": {
+                    "ime": "Glavašev slap",
+                    "vrsta": "slap",
+                    "visina": 0.5,
+                    "udaljenost do izvora": 22.5,
+                    "udaljenost do ušća": 41.5,
+                    "opis": ""
+                },
+                "45": {
+                    "ime": "Benića slap",
+                    "vrsta": "slap",
+                    "visina": 1.4,
+                    "udaljenost do izvora": 23.0,
+                    "udaljenost do ušća": 41.0,
+                    "opis": ""
+                },
+                "46": {
+                    "ime": "Žarin slap",
+                    "vrsta": "slap",
+                    "visina": 2.0,
+                    "udaljenost do izvora": 24.5,
+                    "udaljenost do ušća": 39.5,
+                    "opis": ""
+                },
+                "47": {
+                    "ime": "Klarića slap",
+                    "vrsta": "slap",
+                    "visina": 4.0,
+                    "udaljenost do izvora": 25.5,
+                    "udaljenost do ušća": 38.5,
+                    "opis": ""
+                },
+                "48": {
+                    "ime": "?",
+                    "vrsta": "poslapak",
+                    "visina": 0.2,
+                    "udaljenost do izvora": 25.75,
+                    "udaljenost do ušća": 38.25,
+                    "opis": ""
+                },
+                "49": {
+                    "ime": "?",
+                    "vrsta": "slap",
+                    "visina": 1.2,
+                    "udaljenost do izvora": 26,
+                    "udaljenost do ušća": 38,
+                    "opis": ""
+                },
+                "50": {
+                    "ime": "Bobanov slap",
+                    "vrsta": "slap",
+                    "visina": 0.4,
+                    "udaljenost do izvora": 26.5,
+                    "udaljenost do ušća": 37.5,
+                    "opis": ""
+                },
+                "51": {
+                    "ime": "Sastavci",
+                    "vrsta": "slapište",
+                    "visina": 3.0,
+                    "udaljenost do izvora": 26.5,
+                    "udaljenost do ušća": 37.5,
+                    "opis": ""
+                },
+                "52": {
+                    "ime": "Mrkin malin",
+                    "vrsta": "poslapak",
+                    "visina": 0.2,
+                    "udaljenost do izvora": 28.5,
+                    "udaljenost do ušća": 35.5,
+                    "opis": ""
+                },
+                "53": {
+                    "ime": "Ključarica slap",
+                    "vrsta": "slap",
+                    "visina": 0.6,
+                    "udaljenost do izvora": 28.6,
+                    "udaljenost do ušća": 35.4,
+                    "opis": ""
+                },
+                "54": {
+                    "ime": "Mlinište",
+                    "vrsta": "slap",
+                    "visina": 1.5,
+                    "udaljenost do izvora": 29.0,
+                    "udaljenost do ušća": 35.0,
+                    "opis": ""
+                },
+                "55": {
+                    "ime": "Janjašac",
+                    "vrsta": "slap",
+                    "visina": 1.9,
+                    "udaljenost do izvora": 30.0,
+                    "udaljenost do ušća": 34.0,
+                    "opis": ""
+                },
+                "56": {
+                    "ime": "?",
+                    "vrsta": "slap",
+                    "visina": 0.4,
+                    "udaljenost do izvora": 30.5,
+                    "udaljenost do ušća": 33.5,
+                    "opis": ""
+                },
+                "57": {
+                    "ime": "Mali Rebića slap",
+                    "vrsta": "slap",
+                    "visina": 0.7,
+                    "udaljenost do izvora": 31.5,
+                    "udaljenost do ušća": 32.5,
+                    "opis": ""
+                },
+                "58": {
+                    "ime": "Rebića slap",
+                    "vrsta": "slap",
+                    "visina": 4.5,
+                    "udaljenost do izvora": 31.5,
+                    "udaljenost do ušća": 32.5,
+                    "opis": ""
+                },
+                "59": {
+                    "ime": "?",
+                    "vrsta": "slap",
+                    "visina": 0.3,
+                    "udaljenost do izvora": 32.0,
+                    "udaljenost do ušća": 32.0,
+                    "opis": ""
+                },
+                "60": {
+                    "ime": "Vitasov slap",
+                    "vrsta": "slap",
+                    "visina": 1.4,
+                    "udaljenost do izvora": 32.5,
+                    "udaljenost do ušća": 31.5,
+                    "opis": ""
+                },
+                "61": {
+                    "ime": "Erdeljsko-Gaćeški slap",
+                    "vrsta": "slap s 2 kaskade",
+                    "visina": 1.5,
+                    "udaljenost do izvora": 34.5,
+                    "udaljenost do ušća": 29.5,
+                    "opis": ""
+                },
+                "62": {
+                    "ime": "Katića slap",
+                    "vrsta": "slap",
+                    "visina": 1.8,
+                    "udaljenost do izvora": 35.0,
+                    "udaljenost do ušća": 29.0,
+                    "opis": ""
+                },
+                "63": {
+                    "ime": "Garevića slap",
+                    "vrsta": "slap",
+                    "visina": 0.4,
+                    "udaljenost do izvora": 35.5,
+                    "udaljenost do ušća": 28.5,
+                    "opis": ""
+                },
+                "64": {
+                    "ime": "Ruškovac",
+                    "vrsta": "slap",
+                    "visina": 0.5,
+                    "udaljenost do izvora": 36.25,
+                    "udaljenost do ušća": 27.75,
+                    "opis": ""
+                },
+                "65": {
+                    "ime": "Malinica",
+                    "vrsta": "slap",
+                    "visina": 1.5,
+                    "udaljenost do izvora": 37.0,
+                    "udaljenost do ušća": 27.0,
+                    "opis": ""
+                },
+                "66": {
+                    "ime": "Dobrenića slap",
+                    "vrsta": "slap",
+                    "visina": 2.2,
+                    "udaljenost do izvora": 38.0,
+                    "udaljenost do ušća": 26.0,
+                    "opis": ""
+                },
+                "67": {
+                    "ime": "Švaran",
+                    "vrsta": "slap",
+                    "visina": 1.0,
+                    "udaljenost do izvora": 39.0,
+                    "udaljenost do ušća": 25.0,
+                    "opis": ""
+                },
+                "68": {
+                    "ime": "?",
+                    "vrsta": "slap",
+                    "visina": 1.0,
+                    "udaljenost do izvora": 40.0,
+                    "udaljenost do ušća": 24.0,
+                    "opis": ""
+                },
+                "69": {
+                    "ime": "?",
+                    "vrsta": "slap",
+                    "visina": 1.0,
+                    "udaljenost do izvora": 41.0,
+                    "udaljenost do ušća": 23.0,
+                    "opis": ""
+                },
+                "70": {
+                    "ime": "?",
+                    "vrsta": "poslapak",
+                    "visina": 0.3,
+                    "udaljenost do izvora": 43.0,
+                    "udaljenost do ušća": 21.0,
+                    "opis": ""
+                },
+                "71": {
+                    "ime": "?",
+                    "vrsta": "slap",
+                    "visina": 0.9,
+                    "udaljenost do izvora": 43.0,
+                    "udaljenost do ušća": 21.0,
+                    "opis": ""
+                },
+                "72": {
+                    "ime": "Benića slap",
+                    "vrsta": "slap",
+                    "visina": 1.0,
+                    "udaljenost do izvora": 43.25,
+                    "udaljenost do ušća": 20.75,
+                    "opis": ""
+                },
+                "73": {
+                    "ime": "Puškarića slap",
+                    "vrsta": "slap",
+                    "visina": 1.0,
+                    "udaljenost do izvora": 43.5,
+                    "udaljenost do ušća": 20.5,
+                    "opis": ""
+                },
+                "74": {
+                    "ime": "Slapište",
+                    "vrsta": "poslapak",
+                    "visina": 0.5,
+                    "udaljenost do izvora": 43.5,
+                    "udaljenost do ušća": 20.5,
+                    "opis": ""
+                },
+                "75": {
+                    "ime": "Radinovića slap",
+                    "vrsta": "2 kaskade",
+                    "visina": 0.7,
+                    "udaljenost do izvora": 44.5,
+                    "udaljenost do ušća": 19.5,
+                    "opis": ""
+                },
+                "76": {
+                    "ime": "Janosov slap",
+                    "vrsta": "slapište",
+                    "visina": "?",
+                    "udaljenost do izvora": 44.8,
+                    "udaljenost do ušća": 19.2,
+                    "opis": ""
+                },
+                "77": {
+                    "ime": "Kosov slap",
+                    "vrsta": "slap",
+                    "visina": 1.5,
+                    "udaljenost do izvora": 46.0,
+                    "udaljenost do ušća": 18.0,
+                    "opis": ""
+                },
+                "78": {
+                    "ime": "Polovićev slap gornji",
+                    "vrsta": "slap",
+                    "visina": 1.1,
+                    "udaljenost do izvora": 47.5,
+                    "udaljenost do ušća": 16.5,
+                    "opis": ""
+                },
+                "79": {
+                    "ime": "?",
+                    "vrsta": "slap",
+                    "visina": 0.7,
+                    "udaljenost do izvora": 48.0,
+                    "udaljenost do ušća": 16.0,
+                    "opis": ""
+                },
+                "80": {
+                    "ime": "Malovićev slap",
+                    "vrsta": "slap",
+                    "visina": 0.5,
+                    "udaljenost do izvora": 48.5,
+                    "udaljenost do ušća": 15.5,
+                    "opis": ""
+                },
+                "81": {
+                    "ime": "?",
+                    "vrsta": "2 kaskade",
+                    "visina": 0.8,
+                    "udaljenost do izvora": 49.0,
+                    "udaljenost do ušća": 15.0,
+                    "opis": ""
+                },
+                "82": {
+                    "ime": "Slap kod mlina",
+                    "vrsta": "slap",
+                    "visina": 1.0,
+                    "udaljenost do izvora": 50.5,
+                    "udaljenost do ušća": 13.5,
+                    "opis": ""
+                },
+                "83": {
+                    "ime": "?",
+                    "vrsta": "2 kaskade",
+                    "visina": 1.1,
+                    "udaljenost do izvora": 50.5,
+                    "udaljenost do ušća": 13.5,
+                    "opis": ""
+                },
+                "84": {
+                    "ime": "Jurčevića slap",
+                    "vrsta": "slap",
+                    "visina": 0.7,
+                    "udaljenost do izvora": 51.0,
+                    "udaljenost do ušća": 13.0,
+                    "opis": ""
+                },
+                "85": {
+                    "ime": "Kavurov slap",
+                    "vrsta": "slap",
+                    "visina": 0.8,
+                    "udaljenost do izvora": 51.5,
+                    "udaljenost do ušća": 12.5,
+                    "opis": ""
+                },
+                "86": {
+                    "ime": "Polovićev slap donji",
+                    "vrsta": "slap",
+                    "visina": 1.0,
+                    "udaljenost do izvora": 53.0,
+                    "udaljenost do ušća": 11.0,
+                    "opis": ""
+                },
+                "87": {
+                    "ime": "Bosiljevac-Brezarić",
+                    "vrsta": "slap",
+                    "visina": 1.3,
+                    "udaljenost do izvora": 54.0,
+                    "udaljenost do ušća": 10.0,
+                    "opis": ""
+                },
+                "88": {
+                    "ime": "Grabusov slap",
+                    "vrsta": "slap",
+                    "visina": 0.2,
+                    "udaljenost do izvora": 55.0,
+                    "udaljenost do ušća": 9.0,
+                    "opis": ""
+                },
+                "89": {
+                    "ime": "Gornji mlin",
+                    "vrsta": "slap",
+                    "visina": "?",
+                    "udaljenost do izvora": 55.8,
+                    "udaljenost do ušća": 8.2,
+                    "opis": ""
+                },
+                "90": {
+                    "ime": "Tvornička brana",
+                    "vrsta": "slap",
+                    "visina": 4.0,
+                    "udaljenost do izvora": 56.0,
+                    "udaljenost do ušća": 8.0,
+                    "opis": ""
+                },
+                "91": {
+                    "ime": "Donji mlin",
+                    "vrsta": "slap",
+                    "visina": 2.0,
+                    "udaljenost do izvora": 58.0,
+                    "udaljenost do ušća": 6.0,
+                    "opis": ""
+                },
+                "92": {
+                    "ime": "?",
+                    "vrsta": "slap",
+                    "visina": 1.8,
+                    "udaljenost do izvora": 61.0,
+                    "udaljenost do ušća": 3.0,
+                    "opis": ""
+                }
+            }
+        }
+    }
+}
