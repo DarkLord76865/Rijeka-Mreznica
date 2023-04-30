@@ -1,4 +1,5 @@
 import tkinter
+import tkinter.font as tkinterfont
 import tkintermapview
 from PIL import ImageTk
 from PIL import Image as ImagePIL
@@ -6,6 +7,67 @@ import os
 import sys
 import cv2
 import numpy as np
+
+
+class Background:
+	def __init__(self, root, relx, rely, relwidth, relheight):
+		self.root = root
+		self.relx = relx
+		self.rely = rely
+		self.relwidth = relwidth
+		self.relheight = relheight
+
+		self.widget = tkinter.Canvas(root, borderwidth=0, highlightthickness=0)
+
+		self.img = self.widget.create_image(0, 0, anchor="nw")
+		self.img_data = None
+
+		self.title = self.widget.create_text(10, 10, anchor=tkinter.CENTER, text="Rijeka Mrežnica", fill="#ffffff")
+		self.title_font = tkinterfont.Font(family="Arial", size=25, weight="bold")
+
+		self.widget.place(relx=self.relx, rely=self.rely, relwidth=self.relwidth, relheight=self.relheight)
+
+		self.update()
+
+	def update(self):
+		self.widget.update()
+		self.update_img(self.widget.winfo_width(), self.widget.winfo_height())
+
+		font_height = self.title_font.metrics("ascent") + self.title_font.metrics("descent")
+		if font_height > self.widget.winfo_height() * 0.20:
+			while font_height > self.widget.winfo_height() * 0.20:
+				self.title_font.configure(size=self.title_font["size"] - 1)
+				font_height = self.title_font.metrics("ascent") + self.title_font.metrics("descent")
+		else:
+			while font_height < self.widget.winfo_height() * 0.20:
+				self.title_font.configure(size=self.title_font["size"] + 1)
+				font_height = self.title_font.metrics("ascent") + self.title_font.metrics("descent")
+			self.title_font.configure(size=self.title_font["size"] - 1)
+			font_height = self.title_font.metrics("ascent") + self.title_font.metrics("descent")
+
+		font_length = self.title_font.measure("Rijeka Mrežnica")
+		while font_length > self.widget.winfo_width() * 0.90:
+			self.title_font.configure(size=self.title_font["size"] - 1)
+			font_length = self.title_font.measure("Rijeka Mrežnica")
+
+		self.widget.itemconfig(self.title, font=self.title_font)
+		self.widget.coords(self.title, self.widget.winfo_width() // 2, (self.widget.winfo_height() * 0.20) // 2)
+
+	def update_img(self, width, height):
+		global wood_texture
+
+		background_image = wood_texture.copy()
+
+		while background_image.shape[0] < height:
+			background_image = np.concatenate((background_image, wood_texture), axis=0)
+
+		while background_image.shape[1] < width:
+			background_image = np.concatenate((background_image, background_image), axis=1)
+
+		background_image = background_image[:height, :width]
+
+		self.img_data = ImageTk.PhotoImage(ImagePIL.fromarray(background_image))
+		self.widget.itemconfig(self.img, image=self.img_data)
 
 
 def resource_path(relative_path):
@@ -17,28 +79,9 @@ def resource_path(relative_path):
 		base_path = os.path.abspath(".")
 	return os.path.join(base_path, relative_path)
 
-def create_background_image(width, height):
-	global wood_texture
-
-	background_image = wood_texture.copy()
-
-	while background_image.shape[0] < height:
-		background_image = np.concatenate((background_image, wood_texture), axis=0)
-
-	while background_image.shape[1] < width:
-		background_image = np.concatenate((background_image, background_image), axis=1)
-
-	background_image = background_image[:height, :width]
-
-	return background_image
-
 def resize(event):
-	global width
-	global height
-	global root
-
-	global background_img
-	global background_lbl
+	global background
+	global width, height
 
 	if event.widget != root or (event.width == width and event.height == height):
 		return
@@ -46,8 +89,7 @@ def resize(event):
 	width = event.width
 	height = event.height
 
-	background_img = ImageTk.PhotoImage(ImagePIL.fromarray(create_background_image(width, height)))
-	background_lbl.config(image=background_img)
+	background.update()
 
 
 MAP_SERVERS = {
@@ -60,8 +102,8 @@ wood_texture = cv2.cvtColor(cv2.imread(resource_path("data\\wood_texture.png"), 
 
 # create tkinter window
 root = tkinter.Tk()
-width = 650
-height = 500
+width = 1280
+height = 720
 root.geometry(f"{width}x{height}+{(root.winfo_screenwidth() // 2) - (width // 2)}+{(root.winfo_screenheight() // 2) - (height // 2)}")
 root.minsize(width, height)
 root.title("Rijeka Mrežnica")
@@ -69,9 +111,9 @@ root.iconbitmap(resource_path("data\\river-icon.ico"))
 
 root.bind("<Configure>", resize)
 
-background_img = ImageTk.PhotoImage(ImagePIL.fromarray(create_background_image(width, height)))
-background_lbl = tkinter.Label(root, image=background_img, borderwidth=0, highlightthickness=0)
-background_lbl.place(relx=0.0, rely=0.0, relwidth=1.0, relheight=1.0)
+background = Background(root, relx=0.5, rely=0.0, relwidth=0.5, relheight=1.0)
+background.update()
+
 # create map widget
 
 map_widget = tkintermapview.TkinterMapView(root, borderwidth=0, highlightthickness=0)
