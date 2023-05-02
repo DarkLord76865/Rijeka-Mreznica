@@ -1,12 +1,14 @@
-import tkinter
-import tkinter.font as tkinterfont
-import tkintermapview
-from PIL import ImageTk
-from PIL import Image as ImagePIL
+import json
 import os
 import sys
+import tkinter
+import tkinter.font as tkinterfont
+
 import cv2
 import numpy as np
+import tkintermapview
+from PIL import Image as ImagePIL
+from PIL import ImageTk
 
 
 class Background:
@@ -17,7 +19,9 @@ class Background:
 		self.relwidth = relwidth
 		self.relheight = relheight
 
-		self.widget = tkinter.Canvas(root, borderwidth=0, highlightthickness=0)
+		self.wood_texture = cv2.cvtColor(cv2.imread(resource_path("data\\wood_texture.png"), cv2.IMREAD_UNCHANGED), cv2.COLOR_BGR2RGB)
+
+		self.widget = tkinter.Canvas(self.root, borderwidth=0, highlightthickness=0)
 
 		self.img = self.widget.create_image(0, 0, anchor="nw")
 		self.img_data = None
@@ -54,12 +58,10 @@ class Background:
 		self.widget.coords(self.title, self.widget.winfo_width() // 2, (self.widget.winfo_height() * 0.20) // 2)
 
 	def update_img(self, width, height):
-		global wood_texture
-
-		background_image = wood_texture.copy()
+		background_image = self.wood_texture
 
 		while background_image.shape[0] < height:
-			background_image = np.concatenate((background_image, wood_texture), axis=0)
+			background_image = np.concatenate((background_image, self.wood_texture), axis=0)
 
 		while background_image.shape[1] < width:
 			background_image = np.concatenate((background_image, background_image), axis=1)
@@ -69,6 +71,49 @@ class Background:
 		self.img_data = ImageTk.PhotoImage(ImagePIL.fromarray(background_image))
 		self.widget.itemconfig(self.img, image=self.img_data)
 
+class Map:
+	def __init__(self, root, relx, rely, relwidth, relheight, max_zoom=19, map_server="OpenStreetMap", overlay_server="", zoom=10, center=(45.295, 15.44)):
+		self.root = root
+
+		self.relx = relx
+		self.rely = rely
+		self.relwidth = relwidth
+		self.relheight = relheight
+
+		self.max_zoom = max_zoom
+		self.map_server = map_server
+		self.overlay_server = overlay_server
+
+		self.zoom = zoom
+		self.center = center
+
+		self.widget = tkintermapview.TkinterMapView(self.root, borderwidth=0, highlightthickness=0)
+		self.widget.set_zoom(self.zoom)
+		self.widget.set_position(*self.center)
+
+		self.widget.place(relx=self.relx, rely=self.rely, relwidth=self.relwidth, relheight=self.relheight)
+
+		self.update()
+
+	def change_map(self, map_server):
+		self.map_server = map_server
+		self.update()
+
+	def change_overlay(self, overlay_server):
+		self.overlay_server = overlay_server
+		self.update()
+
+	def update(self):
+		self.widget.set_tile_server(self.map_server)
+		self.widget.set_overlay_tile_server(self.overlay_server)
+
+
+def load_json(file_path):
+
+	with open(file_path, "r", encoding="utf-8") as file:
+		info = json.load(file)
+
+	return info
 
 def resource_path(relative_path):
 	""" Get absolute path to resource, works for dev and for PyInstaller """
@@ -98,7 +143,12 @@ MAP_SERVERS = {
 	"Google-satellite": "https://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}&s=Ga",
 }
 
-wood_texture = cv2.cvtColor(cv2.imread(resource_path("data\\wood_texture.png"), cv2.IMREAD_UNCHANGED), cv2.COLOR_BGR2RGB)
+MREZNICA_DATA = load_json(resource_path("data\\mreznica.json"))
+
+MARKERS = dict()
+for file in os.listdir(resource_path("data\\map_markers")):
+	if file.endswith(".png"):
+		MARKERS[file[4:-4]] = ImageTk.PhotoImage(file=resource_path(f"data\\map_markers\\{file}"))
 
 # create tkinter window
 root = tkinter.Tk()
@@ -111,21 +161,11 @@ root.iconbitmap(resource_path("data\\river-icon.ico"))
 
 root.bind("<Configure>", resize)
 
-background = Background(root, relx=0.5, rely=0.0, relwidth=0.5, relheight=1.0)
-background.update()
+background_object = Background(root, relx=0.5, rely=0.0, relwidth=0.5, relheight=1.0)
 
-# create map widget
+map_object = Map(root, relx=0.5, rely=0.0, relwidth=0.5, relheight=1.0, max_zoom=19)
 
-map_widget = tkintermapview.TkinterMapView(root, borderwidth=0, highlightthickness=0)
-map_widget.place(relwidth=0.5, relheight=1.0, rely=0.0, relx=0.0)
-map_widget.set_tile_server(MAP_SERVERS["Google-map"], max_zoom=19)
-map_widget.set_overlay_tile_server("file://{file_path}".format(file_path=resource_path("data\\river_overlay\\{z}\\{x}\\{y}.png")))
-map_widget.set_zoom(10)
-map_widget.set_position(45.295, 15.44)
-
-
-icon1 = ImageTk.PhotoImage(file="data\\map_markers\\mark1.png")
-icon2 = ImageTk.PhotoImage(file="data\\map_markers\\mark2.png")
+"""
 marker = map_widget.set_marker(45.5981525, 15.7563562, "test", icon=icon1, icon_anchor="s")
 #marker.change_icon(icon)
 #marker.command = testt
@@ -135,5 +175,5 @@ marker2 = map_widget.set_marker(45.0, 45.001, "test")
 marker2.image_zoom_visibility = (10, float("inf"))
 marker2.icon = icon2
 
-
 root.mainloop()
+"""
