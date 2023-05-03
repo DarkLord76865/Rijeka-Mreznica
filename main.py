@@ -72,7 +72,7 @@ class Background:
 		self.widget.itemconfig(self.img, image=self.img_data)
 
 class Map:
-	def __init__(self, root, relx, rely, relwidth, relheight, max_zoom=19, map_server="OpenStreetMap", overlay_server="", zoom=10, center=(45.295, 15.44)):
+	def __init__(self, root, relx, rely, relwidth, relheight, max_zoom=19, map_server="https://a.tile.openstreetmap.org/{z}/{x}/{y}.png", overlay_server="", zoom=10, center=(45.295, 15.44)):
 		self.root = root
 
 		self.relx = relx
@@ -107,6 +107,10 @@ class Map:
 		self.widget.set_tile_server(self.map_server)
 		self.widget.set_overlay_tile_server(self.overlay_server)
 
+	def center_map(self):
+		self.widget.set_position(*self.center)
+		self.widget.set_zoom(self.zoom)
+
 
 def load_json(file_path):
 
@@ -125,7 +129,7 @@ def resource_path(relative_path):
 	return os.path.join(base_path, relative_path)
 
 def resize(event):
-	global background
+	global background_object
 	global width, height
 
 	if event.widget != root or (event.width == width and event.height == height):
@@ -134,8 +138,18 @@ def resize(event):
 	width = event.width
 	height = event.height
 
-	background.update()
+	background_object.update()
 
+
+# create tkinter window
+root = tkinter.Tk()
+width = 1024
+height = 576
+root.geometry(f"{width}x{height}+{(root.winfo_screenwidth() // 2) - (width // 2)}+{(root.winfo_screenheight() // 2) - (height // 2)}")
+root.minsize(width, height)
+root.title("Rijeka Mrežnica")
+root.iconbitmap(resource_path("data\\river-icon.ico"))
+root.bind("<Configure>", resize)
 
 MAP_SERVERS = {
 	"OpenStreetMap": "https://a.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -150,20 +164,16 @@ for file in os.listdir(resource_path("data\\map_markers")):
 	if file.endswith(".png"):
 		MARKERS[file[4:-4]] = ImageTk.PhotoImage(file=resource_path(f"data\\map_markers\\{file}"))
 
-# create tkinter window
-root = tkinter.Tk()
-width = 1280
-height = 720
-root.geometry(f"{width}x{height}+{(root.winfo_screenwidth() // 2) - (width // 2)}+{(root.winfo_screenheight() // 2) - (height // 2)}")
-root.minsize(width, height)
-root.title("Rijeka Mrežnica")
-root.iconbitmap(resource_path("data\\river-icon.ico"))
-
-root.bind("<Configure>", resize)
-
 background_object = Background(root, relx=0.5, rely=0.0, relwidth=0.5, relheight=1.0)
+map_object = Map(root, relx=0.0, rely=0.0, relwidth=0.5, relheight=1.0, max_zoom=19, map_server=MAP_SERVERS["Google-satellite"], overlay_server="file://data/river_overlay/{z}/{x}/{y}.png", zoom=10, center=(45.295, 15.44))
 
-map_object = Map(root, relx=0.5, rely=0.0, relwidth=0.5, relheight=1.0, max_zoom=19)
+crosshair_img_grey = ImageTk.PhotoImage(file=resource_path(f"data\\crosshair-grey.png"))
+crosshair_img_lightgrey = ImageTk.PhotoImage(file=resource_path(f"data\\crosshair-lightgrey.png"))
+center_button = tkinter.Label(root, image=crosshair_img_grey, bg="white", borderwidth=0, highlightthickness=0, cursor="hand2")
+center_button.bind("<Button-1>", lambda event: map_object.center_map())
+center_button.bind("<Enter>", lambda event: center_button.config(image=crosshair_img_lightgrey))
+center_button.bind("<Leave>", lambda event: center_button.config(image=crosshair_img_grey))
+center_button.place(x=20, y=100, width=30, height=30)
 
 """
 marker = map_widget.set_marker(45.5981525, 15.7563562, "test", icon=icon1, icon_anchor="s")
@@ -174,6 +184,6 @@ marker2 = map_widget.set_marker(45.0, 45.001, "test")
 # marker2.image = img
 marker2.image_zoom_visibility = (10, float("inf"))
 marker2.icon = icon2
+"""
 
 root.mainloop()
-"""
