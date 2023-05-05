@@ -39,6 +39,8 @@ class Background:
 		self.wood_texture = cv2.cvtColor(cv2.imread(resource_path("data\\wood_texture.png"), cv2.IMREAD_UNCHANGED), cv2.COLOR_BGR2RGB)
 
 		self.widget = tkinter.Canvas(self.root, borderwidth=0, highlightthickness=0)
+		self.widget.place(relx=self.relx, rely=self.rely, relwidth=self.relwidth, relheight=self.relheight)
+		self.widget.update()
 
 		self.bg = self.widget.create_image(0, 0, anchor="nw")
 		self.bg_data = None
@@ -46,7 +48,8 @@ class Background:
 		self.title = self.widget.create_text(10, 10, anchor=tkinter.CENTER, text="Mrežnica", fill="#ffffff")
 		self.title_font = tkinterfont.Font(family="Gabriola", size=25, weight="bold")
 
-		self.widget.place(relx=self.relx, rely=self.rely, relwidth=self.relwidth, relheight=self.relheight)
+		self.img_frame = Image(self.widget, 0.5, 0.5, 0.9, 0.4)
+
 		self.update()
 
 		self.width = self.widget.winfo_width()
@@ -68,7 +71,6 @@ class Background:
 				self.title_font.configure(size=self.title_font["size"] + 1)
 				font_height = self.title_font.metrics("ascent") + self.title_font.metrics("descent")
 			self.title_font.configure(size=self.title_font["size"] - 1)
-			font_height = self.title_font.metrics("ascent") + self.title_font.metrics("descent")
 
 		font_length = self.title_font.measure("Rijeka Mrežnica")
 		while font_length > self.widget.winfo_width() * 0.90:
@@ -77,6 +79,8 @@ class Background:
 
 		self.widget.itemconfig(self.title, font=self.title_font)
 		self.widget.coords(self.title, self.widget.winfo_width() // 2, (self.widget.winfo_height() * 0.20) // 2)
+
+		self.img_frame.update()
 
 	def update_img(self, width, height):
 		background_image = self.wood_texture
@@ -142,6 +146,50 @@ class Map:
 	def center_map(self):
 		self.widget.set_position(*self.center)
 		self.widget.set_zoom(self.zoom)
+
+class Image:
+	def __init__(self, master, relx, rely, relwidth, relheight):
+		self.master = master
+		self.master_width = self.master.winfo_width()
+		self.master_height = self.master.winfo_height()
+
+		self.relx = relx
+		self.rely = rely
+		self.relwidth = relwidth
+		self.relheight = relheight
+
+		self.x = int(round(relx * self.master_width, 0))
+		self.y = int(round(rely * self.master_height, 0))
+		self.width = int(round(relwidth * self.master_width, 0))
+		self.height = int(round(relheight * self.master_height, 0))
+
+		self.is_blank = True
+		self.blank_image = cv2.imread(resource_path("data\\no-image.png"), cv2.IMREAD_UNCHANGED)
+
+		self.frame_data = ImageTk.PhotoImage(ImagePIL.fromarray(self.generate_blank()))
+		self.frame = self.master.create_image(self.x, self.y, anchor="center", image=self.frame_data)
+
+	def update(self):
+		self.master_width = self.master.winfo_width()
+		self.master_height = self.master.winfo_height()
+		self.x = int(round(self.relx * self.master_width, 0))
+		self.y = int(round(self.rely * self.master_height, 0))
+		self.width = int(round(self.relwidth * self.master_width, 0))
+		self.height = int(round(self.relheight * self.master_height, 0))
+		self.master.coords(self.frame, self.x, self.y)
+		if self.is_blank:
+			self.frame_data = ImageTk.PhotoImage(ImagePIL.fromarray(self.generate_blank()))
+			self.master.itemconfig(self.frame, image=self.frame_data)
+
+	def generate_blank(self):
+		img = np.full((self.height, self.width, 3), 51, dtype=np.uint8)
+		y_low = int(round(img.shape[0] / 2 - self.blank_image.shape[0] / 2, 0))
+		y_high = y_low + self.blank_image.shape[0]
+		x_low = int(round(img.shape[1] / 2 - self.blank_image.shape[1] / 2, 0))
+		x_high = x_low + self.blank_image.shape[1]
+		img[y_low:y_high, x_low:x_high] = self.blank_image
+
+		return img
 
 class App:
 	def __init__(self, root):
