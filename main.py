@@ -11,6 +11,23 @@ from PIL import Image as ImagePIL
 from PIL import ImageTk
 
 
+def resource_path(relative_path):
+	""" Get absolute path to resource, works for dev and for PyInstaller """
+	try:
+		# PyInstaller creates a temp folder and stores path in _MEIPASS
+		base_path = sys._MEIPASS
+	except AttributeError:
+		base_path = os.path.abspath(".")
+	return os.path.join(base_path, relative_path)
+
+def load_json(file_path):
+	""" Load json file """
+	with open(file_path, "r", encoding="utf-8") as file:
+		info = json.load(file)
+
+	return info
+
+
 class Background:
 	def __init__(self, root, relx, rely, relwidth, relheight):
 		self.root = root
@@ -23,15 +40,19 @@ class Background:
 
 		self.widget = tkinter.Canvas(self.root, borderwidth=0, highlightthickness=0)
 
-		self.img = self.widget.create_image(0, 0, anchor="nw")
-		self.img_data = None
+		self.bg = self.widget.create_image(0, 0, anchor="nw")
+		self.bg_data = None
 
 		self.title = self.widget.create_text(10, 10, anchor=tkinter.CENTER, text="Mrežnica", fill="#ffffff")
 		self.title_font = tkinterfont.Font(family="Gabriola", size=25, weight="bold")
 
 		self.widget.place(relx=self.relx, rely=self.rely, relwidth=self.relwidth, relheight=self.relheight)
-
 		self.update()
+
+		self.width = self.widget.winfo_width()
+		self.height = self.widget.winfo_height()
+
+		self.widget.bind("<Configure>", self.resize)
 
 	def update(self):
 		self.widget.update()
@@ -68,12 +89,23 @@ class Background:
 
 		background_image = background_image[:height, :width]
 
-		self.img_data = ImageTk.PhotoImage(ImagePIL.fromarray(background_image))
-		self.widget.itemconfig(self.img, image=self.img_data)
+		self.bg_data = ImageTk.PhotoImage(ImagePIL.fromarray(background_image))
+		self.widget.itemconfig(self.bg, image=self.bg_data)
+
+	def resize(self, event):
+		if event.widget == self.widget and (event.width != self.width or event.height != self.height):
+			self.width = event.width
+			self.height = event.height
+			self.update()
 
 class Map:
 	def __init__(self, root, relx, rely, relwidth, relheight, max_zoom=19, map_server="https://a.tile.openstreetmap.org/{z}/{x}/{y}.png", overlay_server="", zoom=10, center=(45.295, 15.46)):
 		self.root = root
+
+		self.MARKERS = dict()
+		for file in os.listdir(resource_path("data\\map_markers")):
+			if file.endswith(".png"):
+				self.MARKERS[file[4:-4]] = ImageTk.PhotoImage(file=resource_path(f"data\\map_markers\\{file}"))
 
 		self.relx = relx
 		self.rely = rely
@@ -111,167 +143,126 @@ class Map:
 		self.widget.set_position(*self.center)
 		self.widget.set_zoom(self.zoom)
 
+class App:
+	def __init__(self, root):
+		self.root = root
+		self.root.title("Rijeka Mrežnica")
+		self.root.iconbitmap(resource_path("data\\river-icon.ico"))
+		self.width = 960
+		self.height = 720
+		self.root.geometry(f"{self.width}x{self.height}+{(self.root.winfo_screenwidth() // 2) - (self.width // 2)}+{(self.root.winfo_screenheight() // 2) - (self.height // 2)}")
+		self.root.minsize(self.width, self.height)
+		self.root.bind("<Configure>", self.resize)
 
-def load_json(file_path):
+		self.background = Background(self.root, relx=0.5, rely=0.0, relwidth=0.5, relheight=1.0)
 
-	with open(file_path, "r", encoding="utf-8") as file:
-		info = json.load(file)
+		self.map_server = "Google-satellite"
+		self.overlay_active = True
+		self.map = Map(self.root, relx=0.0, rely=0.0, relwidth=0.5, relheight=1.0, map_server=MAP_SERVERS[self.map_server], overlay_server=OVERLAY_SERVER if self.overlay_active else "", zoom=10, center=(45.295, 15.46))
+		self.root.after(100, self.map.center_map)
 
-	return info
+		self.center_btn_img_grey = ImageTk.PhotoImage(file=resource_path(f"data\\crosshair-grey.png"))
+		self.center_btn_img_lightgrey = ImageTk.PhotoImage(file=resource_path(f"data\\crosshair-lightgrey.png"))
+		self.center_btn = tkinter.Label(self.root, image=self.center_btn_img_grey, borderwidth=0, highlightthickness=0, cursor="hand2")
+		self.center_btn.bind("<Button-1>", lambda event: self.map.center_map())
+		self.center_btn.bind("<Enter>", lambda event: self.center_btn.config(image=self.center_btn_img_lightgrey))
+		self.center_btn.bind("<Leave>", lambda event: self.center_btn.config(image=self.center_btn_img_grey))
+		self.center_btn.place(x=20, y=120, width=30, height=30)
 
-def resource_path(relative_path):
-	""" Get absolute path to resource, works for dev and for PyInstaller """
-	try:
-		# PyInstaller creates a temp folder and stores path in _MEIPASS
-		base_path = sys._MEIPASS
-	except AttributeError:
-		base_path = os.path.abspath(".")
-	return os.path.join(base_path, relative_path)
+		self.osm_btn_img_grey = ImageTk.PhotoImage(file=resource_path(f"data\\osm-grey.png"))
+		self.osm_btn_img_lightgrey = ImageTk.PhotoImage(file=resource_path(f"data\\osm-lightgrey.png"))
+		self.osm_btn = tkinter.Label(self.root, image=self.osm_btn_img_grey if self.map_server != "OpenStreetMap" else self.osm_btn_img_lightgrey, borderwidth=0, highlightthickness=0, cursor="hand2")
+		self.osm_btn.bind("<Button-1>", lambda event: self.map_change(self.osm_btn, "OpenStreetMap"))
+		self.osm_btn.bind("<Enter>", lambda event: self.map_change_hover(self.osm_btn, "OpenStreetMap", self.osm_btn_img_lightgrey))
+		self.osm_btn.bind("<Leave>", lambda event: self.map_change_hover(self.osm_btn, "OpenStreetMap", self.osm_btn_img_grey))
+		self.osm_btn.place(x=20, y=self.height - 120, width=30, height=30)
 
-def resize(event):
-	global background_object
-	global width, height
+		self.google_map_btn_img_grey = ImageTk.PhotoImage(file=resource_path(f"data\\google-map-grey.png"))
+		self.google_map_btn_img_lightgrey = ImageTk.PhotoImage(file=resource_path(f"data\\google-map-lightgrey.png"))
+		self.google_map_btn = tkinter.Label(self.root, image=self.google_map_btn_img_grey if self.map_server != "Google-map" else self.google_map_btn_img_lightgrey, borderwidth=0, highlightthickness=0, cursor="hand2")
+		self.google_map_btn.bind("<Button-1>", lambda event: self.map_change(self.google_map_btn, "Google-map"))
+		self.google_map_btn.bind("<Enter>", lambda event: self.map_change_hover(self.google_map_btn, "Google-map", self.google_map_btn_img_lightgrey))
+		self.google_map_btn.bind("<Leave>", lambda event: self.map_change_hover(self.google_map_btn, "Google-map", self.google_map_btn_img_grey))
+		self.google_map_btn.place(x=20, y=self.height - 85, width=30, height=30)
 
-	if event.widget != root or (event.width == width and event.height == height):
-		return
+		self.google_sat_btn_img_grey = ImageTk.PhotoImage(file=resource_path(f"data\\google-satellite-grey.png"))
+		self.google_sat_btn_img_lightgrey = ImageTk.PhotoImage(file=resource_path(f"data\\google-satellite-lightgrey.png"))
+		self.google_sat_btn = tkinter.Label(self.root, image=self.google_sat_btn_img_grey if self.map_server != "Google-satellite" else self.google_sat_btn_img_lightgrey, borderwidth=0, highlightthickness=0, cursor="hand2")
+		self.google_sat_btn.bind("<Button-1>", lambda event: self.map_change(self.google_sat_btn, "Google-satellite"))
+		self.google_sat_btn.bind("<Enter>", lambda event: self.map_change_hover(self.google_sat_btn, "Google-satellite", self.google_sat_btn_img_lightgrey))
+		self.google_sat_btn.bind("<Leave>", lambda event: self.map_change_hover(self.google_sat_btn, "Google-satellite", self.google_sat_btn_img_grey))
+		self.google_sat_btn.place(x=20, y=self.height - 50, width=30, height=30)
 
-	width = event.width
-	height = event.height
+		self.overlay_btn_img_grey = ImageTk.PhotoImage(file=resource_path(f"data\\layers-grey.png"))
+		self.overlay_btn_img_lightgrey = ImageTk.PhotoImage(file=resource_path(f"data\\layers-lightgrey.png"))
+		self.overlay_btn = tkinter.Label(self.root, image=self.overlay_btn_img_lightgrey if self.overlay_active else self.overlay_btn_img_grey, borderwidth=0, highlightthickness=0, cursor="hand2")
+		self.overlay_btn.bind("<Button-1>", lambda event: self.overlay_change(self.overlay_btn))
+		self.overlay_btn.bind("<Enter>", lambda event: self.overlay_change_hover(self.overlay_btn, self.overlay_btn_img_lightgrey))
+		self.overlay_btn.bind("<Leave>", lambda event: self.overlay_change_hover(self.overlay_btn, self.overlay_btn_img_grey))
+		self.overlay_btn.place(x=20, y=self.height - 170, width=30, height=30)
 
-	background_object.update()
+	def resize(self, event):
+		if event.widget == self.root and (event.width != self.width or event.height != self.height):
+			self.width = event.width
+			self.height = event.height
 
-def change_map(map_server):
-	global map_object
-	map_object.change_map(map_server)
+			try:
+				self.google_sat_btn.place(x=20, y=self.height - 50)
+				self.google_map_btn.place(x=20, y=self.height - 85)
+				self.osm_btn.place(x=20, y=self.height - 120)
+				self.overlay_btn.place(x=20, y=self.height - 170)
+			except AttributeError:
+				pass
+				# this might get called while starting the app before the buttons are created, so this will catch that error
 
-def map_change(widget, server):
-	global map_server
-	global map_object
-	global osm_img_grey, osm_img_lightgrey
-	global google_map_img_grey, google_map_img_lightgrey
-	global google_sat_img_grey, google_sat_img_lightgrey
-	global osm_button, google_map_button, google_sat_button
+	def map_change(self, widget, server):
+		if self.map_server != server:
+			self.map.change_map(MAP_SERVERS[server])
 
-	if map_server != server:
-		map_object.change_map(MAP_SERVERS[server])
+			match server:
+				case "OpenStreetMap":
+					widget.configure(image=self.osm_btn_img_lightgrey)
+				case "Google-map":
+					widget.configure(image=self.google_map_btn_img_lightgrey)
+				case "Google-satellite":
+					widget.configure(image=self.google_sat_btn_img_lightgrey)
 
-		match server:
-			case "OpenStreetMap":
-				widget.configure(image=osm_img_lightgrey)
-			case "Google-map":
-				widget.configure(image=google_map_img_lightgrey)
-			case "Google-satellite":
-				widget.configure(image=google_sat_img_lightgrey)
+			match self.map_server:
+				case "OpenStreetMap":
+					self.osm_btn.configure(image=self.osm_btn_img_grey)
+				case "Google-map":
+					self.google_map_btn.configure(image=self.google_map_btn_img_grey)
+				case "Google-satellite":
+					self.google_sat_btn.configure(image=self.google_sat_btn_img_grey)
 
-		match map_server:
-			case "OpenStreetMap":
-				osm_button.configure(image=osm_img_grey)
-			case "Google-map":
-				google_map_button.configure(image=google_map_img_grey)
-			case "Google-satellite":
-				google_sat_button.configure(image=google_sat_img_grey)
+			self.map_server = server
 
-		map_server = server
+	def map_change_hover(self, widget, server, img):
+		if self.map_server != server:
+			widget.configure(image=img)
 
-def map_change_hover(widget, server, img):
-	global map_server
+	def overlay_change(self, widget):
+		if self.overlay_active:
+			widget.configure(image=self.overlay_btn_img_grey)
+			self.overlay_active = False
+			self.map.change_overlay("")
+		else:
+			widget.configure(image=self.overlay_btn_img_lightgrey)
+			self.overlay_active = True
+			self.map.change_overlay(OVERLAY_SERVER)
 
-	if map_server != server:
-		widget.configure(image=img)
+	def overlay_change_hover(self, widget, img):
+		if not self.overlay_active:
+			widget.configure(image=img)
 
-def overlay_change(widget):
-	global OVERLAY_SERVER
-	global overlay_img_lightgrey
-	global overlay_img_grey
-	global overlay_server_active
-	global map_object
-
-	if overlay_server_active:
-		widget.configure(image=overlay_img_grey)
-		overlay_server_active = False
-		map_object.change_overlay("")
-	else:
-		widget.configure(image=overlay_img_lightgrey)
-		overlay_server_active = True
-		map_object.change_overlay(OVERLAY_SERVER)
-
-def overlay_change_hover(widget, img):
-	global overlay_server_active
-
-	if not overlay_server_active:
-		widget.configure(image=img)
-
-
-# create tkinter window
-root = tkinter.Tk()
-width = 960
-height = 720
-root.geometry(f"{width}x{height}+{(root.winfo_screenwidth() // 2) - (width // 2)}+{(root.winfo_screenheight() // 2) - (height // 2)}")
-root.minsize(width, height)
-root.title("Rijeka Mrežnica")
-root.iconbitmap(resource_path("data\\river-icon.ico"))
-root.bind("<Configure>", resize)
 
 MAP_SERVERS = {
 	"OpenStreetMap": "https://a.tile.openstreetmap.org/{z}/{x}/{y}.png",
 	"Google-map": "https://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}&s=Ga",
 	"Google-satellite": "https://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}&s=Ga",
 }
-
-OVERLAY_SERVER = "file://data/river_overlay/{z}/{x}/{y}.png"
-
+OVERLAY_SERVER = f"file://{resource_path('data/river_overlay/{z}/{x}/{y}.png')}"
 MREZNICA_DATA = load_json(resource_path("data\\mreznica.json"))
-
-MARKERS = dict()
-for file in os.listdir(resource_path("data\\map_markers")):
-	if file.endswith(".png"):
-		MARKERS[file[4:-4]] = ImageTk.PhotoImage(file=resource_path(f"data\\map_markers\\{file}"))
-
-background_object = Background(root, relx=0.5, rely=0.0, relwidth=0.5, relheight=1.0)
-map_object = Map(root, relx=0.0, rely=0.0, relwidth=0.5, relheight=1.0, max_zoom=19, map_server=MAP_SERVERS["Google-satellite"], overlay_server="file://data/river_overlay/{z}/{x}/{y}.png", zoom=10, center=(45.295, 15.46))
-
-crosshair_img_grey = ImageTk.PhotoImage(file=resource_path(f"data\\crosshair-grey.png"))
-crosshair_img_lightgrey = ImageTk.PhotoImage(file=resource_path(f"data\\crosshair-lightgrey.png"))
-center_button = tkinter.Label(root, image=crosshair_img_grey, bg="white", borderwidth=0, highlightthickness=0, cursor="hand2")
-center_button.bind("<Button-1>", lambda event: map_object.center_map())
-center_button.bind("<Enter>", lambda event: center_button.config(image=crosshair_img_lightgrey))
-center_button.bind("<Leave>", lambda event: center_button.config(image=crosshair_img_grey))
-center_button.place(x=20, y=100, width=30, height=30)
-
-map_server = "Google-satellite"
-overlay_server_active = True
-
-osm_img_grey = ImageTk.PhotoImage(file=resource_path(f"data\\osm-grey.png"))
-osm_img_lightgrey = ImageTk.PhotoImage(file=resource_path(f"data\\osm-lightgrey.png"))
-osm_button = tkinter.Label(root, image=osm_img_grey, bg="white", borderwidth=0, highlightthickness=0, cursor="hand2")
-osm_button.bind("<Button-1>", lambda event: map_change(osm_button, "OpenStreetMap"))
-osm_button.bind("<Enter>", lambda event: map_change_hover(osm_button, "OpenStreetMap", osm_img_lightgrey))
-osm_button.bind("<Leave>", lambda event: map_change_hover(osm_button, "OpenStreetMap", osm_img_grey))
-osm_button.place(x=20, y=150, width=30, height=30)
-
-google_map_img_grey = ImageTk.PhotoImage(file=resource_path(f"data\\google-map-grey.png"))
-google_map_img_lightgrey = ImageTk.PhotoImage(file=resource_path(f"data\\google-map-lightgrey.png"))
-google_map_button = tkinter.Label(root, image=google_map_img_grey, bg="white", borderwidth=0, highlightthickness=0, cursor="hand2")
-google_map_button.bind("<Button-1>", lambda event: map_change(google_map_button, "Google-map"))
-google_map_button.bind("<Enter>", lambda event: map_change_hover(google_map_button, "Google-map", google_map_img_lightgrey))
-google_map_button.bind("<Leave>", lambda event: map_change_hover(google_map_button, "Google-map", google_map_img_grey))
-google_map_button.place(x=20, y=200, width=30, height=30)
-
-google_sat_img_grey = ImageTk.PhotoImage(file=resource_path(f"data\\google-satellite-grey.png"))
-google_sat_img_lightgrey = ImageTk.PhotoImage(file=resource_path(f"data\\google-satellite-lightgrey.png"))
-google_sat_button = tkinter.Label(root, image=google_sat_img_lightgrey, bg="white", borderwidth=0, highlightthickness=0, cursor="hand2")
-google_sat_button.bind("<Button-1>", lambda event: map_change(google_sat_button, "Google-satellite"))
-google_sat_button.bind("<Enter>", lambda event: map_change_hover(google_sat_button, "Google-satellite", google_sat_img_lightgrey))
-google_sat_button.bind("<Leave>", lambda event: map_change_hover(google_sat_button, "Google-satellite", google_sat_img_grey))
-google_sat_button.place(x=20, y=250, width=30, height=30)
-
-overlay_img_grey = ImageTk.PhotoImage(file=resource_path(f"data\\layers-grey.png"))
-overlay_img_lightgrey = ImageTk.PhotoImage(file=resource_path(f"data\\layers-lightgrey.png"))
-overlay_button = tkinter.Label(root, image=overlay_img_lightgrey, borderwidth=0, highlightthickness=0, cursor="hand2")
-overlay_button.bind("<Button-1>", lambda event: overlay_change(overlay_button))
-overlay_button.bind("<Enter>", lambda event: overlay_change_hover(overlay_button, overlay_img_lightgrey))
-overlay_button.bind("<Leave>", lambda event: overlay_change_hover(overlay_button, overlay_img_grey))
-overlay_button.place(x=20, y=300, width=30, height=30)
 
 
 """
@@ -285,4 +276,12 @@ marker2.image_zoom_visibility = (10, float("inf"))
 marker2.icon = icon2
 """
 
-root.mainloop()
+
+def main():
+	root = tkinter.Tk()
+	App(root)
+	root.mainloop()
+
+
+if __name__ == "__main__":
+	main()
